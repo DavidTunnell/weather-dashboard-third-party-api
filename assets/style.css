@@ -1,0 +1,65 @@
+/* Layout inspired from https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_temp_blog&stacked=h , https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_temp_portfolio&stacked=h*/
+
+
+/* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+
+.row.content {
+    height: 38em;
+}
+
+
+/* Set gray background color and 100% height */
+
+.sidenav {
+    background-color: #f1f1f1;
+    height: 100%;
+}
+
+.input-group {
+    margin-bottom: 1em;
+}
+
+.jumbotron {
+    margin: 1em;
+    padding: 1em 0 0 0;
+}
+
+.jumbotron p {
+    font-size: 10px;
+}
+
+.cards {
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.card-rows {
+    margin: auto;
+    width: 96%;
+}
+
+
+/* Set black background color, white text and some padding */
+
+footer {
+    background-color: #555;
+    color: white;
+    padding: 15px;
+    height: 3.5em;
+}
+
+
+/* On small screens, set height to 'auto' for sidenav and grid */
+
+@media screen and (max-width: 767px) {
+    .sidenav {
+        height: auto;
+        padding: 15px;
+    }
+    .row.content {
+        height: auto;
+    }
+    .cards {
+        padding: 0.2em;
+    }
+}
