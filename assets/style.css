@@ -36,6 +36,7 @@
 .card-rows {
     margin: auto;
     width: 96%;
+    padding-left: 0.5em;
 }
 
 

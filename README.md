@@ -6,4 +6,8 @@ https://openweathermap.org/api/one-call-api
 
 Persistent data is stored in local storage.
 
+A live demo can be found here: https://davidtunnell.github.io/weather-dashboard-third-party-api/
 
+#Screenshots
+
+![Screenshot](./assets/screencap.png)
