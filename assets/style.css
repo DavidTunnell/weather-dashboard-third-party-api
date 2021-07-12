@@ -25,18 +25,23 @@
 }
 
 .jumbotron p {
-    font-size: 10px;
+    font-size: 1em;
 }
 
 .cards {
-    margin: 10px;
+    margin: 5px;
     border-radius: 5px;
+    width: 18%;
 }
 
 .card-rows {
     margin: auto;
     width: 96%;
-    padding-left: 0.5em;
+    padding-left: 1.5em;
+}
+
+.cards p {
+    font-size: 0.75em;
 }
 
 
@@ -62,5 +67,6 @@ footer {
     }
     .cards {
         padding: 0.2em;
+        width: 100%;
     }
 }
