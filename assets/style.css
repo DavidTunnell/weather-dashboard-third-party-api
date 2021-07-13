@@ -4,7 +4,7 @@
 /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
 
 .row.content {
-    height: 38em;
+    height: 45em;
 }
 
 
@@ -35,7 +35,7 @@
 }
 
 .card-rows {
-    margin: auto;
+    margin: auto auto 2em auto;
     width: 96%;
     padding-left: 1.5em;
 }
@@ -57,7 +57,7 @@ footer {
 
 /* On small screens, set height to 'auto' for sidenav and grid */
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 768px) {
     .sidenav {
         height: auto;
         padding: 15px;
@@ -68,5 +68,8 @@ footer {
     .cards {
         padding: 0.2em;
         width: 100%;
+    }
+    .card-rows {
+        padding-left: 0;
     }
 }
