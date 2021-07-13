@@ -44,6 +44,8 @@ navMenu.addEventListener("click", function(event) {
     if (lat) {
         getWeatherAndCityThenLoad(lat, lon, apiKey);
         cardRows.innerHTML = "";
+        userInputFieldEl.classList.remove("invalid");
+        userInputFieldEl.placeholder = "Search City Name...";
     }
 });
 
@@ -52,6 +54,8 @@ function userEntryAction(userInput) {
     addCity(userInput.value);
     userInput.value = "";
     cardRows.innerHTML = "";
+    userInputFieldEl.classList.remove("invalid");
+    userInputFieldEl.placeholder = "Search City Name...";
 }
 
 //add a city to the DOM and local storage, update the object array if it goes over the max allowed
@@ -175,9 +179,6 @@ async function getCityName(geoLat, geoLong, apiKey) {
     const response = await fetch(consCoords).then(response => {
         if (response.ok) {
             return response.json();
-        } else {
-            userInputFieldEl.classList.add("invalid");
-            userInputFieldEl.placeholder = "test";
         }
     });
     return response.city.name;
@@ -191,6 +192,7 @@ async function getCoordinates(cityName, apiKey) {
         if (response.ok) {
             return response.json();
         } else {
+            //user entry validation
             userInputFieldEl.classList.add("invalid");
             userInputFieldEl.placeholder = "Enter Valid City (" + response.status + ")";
         }
@@ -231,17 +233,3 @@ function populateForecast(cityName, jsonObject) {
 
 //run when page loads
 onLoad();
-
-
-// function getWeatherByZipCode(zipCode, apiKey) {
-//     var consZip = "https://api.openweathermap.org/data/2.5/onecall?units=imperial&zip=" +
-//         zipCode + "&appid=" + apiKey;
-
-//     fetch(consZip).then(response => {
-//         return response.json();
-//     }).then(function(response) {
-//         console.log(response);
-//         //call new function here to populate data
-//     });
-// }   });
-// }
