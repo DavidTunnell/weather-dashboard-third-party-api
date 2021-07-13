@@ -31,10 +31,22 @@ submitButton.addEventListener("click", function(event) {
     userEntryAction(userInputControl)
 });
 
+//search history event listener
+navMenu.addEventListener("click", function(event) {
+    var lat = event.target.parentNode.dataset.lat;
+    var lon = event.target.parentNode.dataset.lon;
+    //if undefined then user didn't click button (clicked parent)
+    if (lat) {
+        getWeatherAndCityThenLoad(lat, lon, apiKey);
+        cardRows.innerHTML = "";
+    }
+});
+
 //functionality of the user entry
 function userEntryAction(userInput) {
     addCity(userInput.value);
     userInput.value = "";
+    cardRows.innerHTML = "";
 }
 
 //add a city to the DOM and local storage, update the object array if it goes over the max allowed
@@ -42,10 +54,28 @@ function addCity(cityUserEntry) {
     var coords = getCoordinates(cityUserEntry, apiKey);
     //get data needed to add to DOM and local storage
     coords.then((data) => {
-        var listHtml = "<li class='active' data-lat='" + data.city.coord.lat + "' data-lon='" +
-            data.city.coord.lon + "'><a>" + cityUserEntry + "</a></li>";
+        var lat = data.city.coord.lat;
+        var lon = data.city.coord.lon;
+
+        var listHtml = "<li class='active' data-lat='" + lat + "' data-lon='" +
+            lon + "'><a>" + cityUserEntry + "</a></li>";
         //add to DOM at the beginning of the element
         navMenu.insertAdjacentHTML("afterbegin", listHtml);
+
+
+
+
+        //IF MORE THAN MAX NEED TO DELETE ONE (BOTTOM) FROM DOM ALSO
+        console.log(navMenu.children.length == maxNumberOfMenuItems + 1);
+        console.log(maxNumberOfMenuItems);
+        console.log(navMenu.children.length);
+
+        //this works but its not adding it now <<<<<<<<<<<<<<<<
+        if (navMenu.children.length == maxNumberOfMenuItems + 1 || navMenu.children.length == maxNumberOfMenuItems) {
+            navMenu.children[maxNumberOfMenuItems - 1].remove();
+        }
+
+
         //add to local storage
         // Parse any JSON previously stored in allEntries
         var existingEntries = JSON.parse(localStorage.getItem("allSavedCities"));
@@ -67,6 +97,8 @@ function addCity(cityUserEntry) {
         existingEntries.unshift(cityObject);
         // Save array back to local storage
         localStorage.setItem("allSavedCities", JSON.stringify(existingEntries));
+        //also load weather data in DOM
+        getWeatherAndCityThenLoad(lat, lon, apiKey);
     });
 }
 
@@ -91,16 +123,7 @@ function onLoad() {
                 //get lat and long coordinates
                 var lat = a.coords.latitude;
                 var long = a.coords.longitude;
-                //get data from both APIs since one call doesn't have city name
-                var cityRes = getCityName(lat, long, apiKey);
-                //https://stackoverflow.com/questions/14220321/how-to-return-the-response-from-an-asynchronous-call
-                cityRes.then((dataFromForecastApi) => {
-                    var weatherObject = getWeatherByGeolocation(lat, long, apiKey);
-                    weatherObject.then((dataFromOneCallApi) => {
-                        //use data to populate page by default
-                        populateForecast(dataFromForecastApi, dataFromOneCallApi);
-                    });
-                });
+                getWeatherAndCityThenLoad(lat, long, apiKey)
             }
         });
     } else {
@@ -109,6 +132,19 @@ function onLoad() {
     }
     //populate the menu if it exists from local storage
     populateMenu();
+}
+
+function getWeatherAndCityThenLoad(lat, long, apiKey) {
+    //get data from both APIs since one call doesn't have city name
+    var cityRes = getCityName(lat, long, apiKey);
+    //https://stackoverflow.com/questions/14220321/how-to-return-the-response-from-an-asynchronous-call
+    cityRes.then((dataFromForecastApi) => {
+        var weatherObject = getWeatherByGeolocation(lat, long, apiKey);
+        weatherObject.then((dataFromOneCallApi) => {
+            //use data to populate page by default
+            populateForecast(dataFromForecastApi, dataFromOneCallApi);
+        });
+    });
 }
 
 //get weather using latitude and longitude
