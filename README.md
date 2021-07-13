@@ -13,6 +13,6 @@ https://openweathermap.org/api/one-call-api
 
 A live demo can be found here: https://davidtunnell.github.io/weather-dashboard-third-party-api/
 
-#Screenshots
+# Screenshots
 
 ![Screenshot](./assets/screencap.png)

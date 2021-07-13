@@ -145,6 +145,7 @@ function onLoad() {
     populateMenu();
 }
 
+//get the weather, city name and load to DOM 
 function getWeatherAndCityThenLoad(lat, long, apiKey) {
     //get data from both APIs since one call doesn't have city name
     var cityRes = getCityName(lat, long, apiKey);
