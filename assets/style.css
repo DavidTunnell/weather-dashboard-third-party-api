@@ -44,6 +44,14 @@
     font-size: 0.75em;
 }
 
+.input-group-btn {
+    padding-left: 1px;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
 
 /* Set black background color, white text and some padding */
 
@@ -52,6 +60,10 @@ footer {
     color: white;
     padding: 15px;
     height: 3.5em;
+}
+
+.invalid {
+    border: 2px dashed red;
 }
 
 

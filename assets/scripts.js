@@ -12,9 +12,14 @@ var cardRows = document.querySelector(".card-rows");
 var inputGroup = document.querySelector(".input-group");
 var submitButton = document.querySelector(".submit-button");
 var navMenu = document.querySelector(".nav-pills");
+var yearCrEl = document.querySelector(".current-year");
+var userInputFieldEl = document.querySelector(".form-control");
 
 //max search history
 var maxNumberOfMenuItems = 8;
+
+//set year in DOM footer
+yearCrEl.innerHTML = moment().year();
 
 //event listeners for both enter and button press
 //enter pressed by user in input
@@ -28,7 +33,7 @@ inputGroup.addEventListener("keyup", function(event) {
 //search button pressed by user
 submitButton.addEventListener("click", function(event) {
     var userInputControl = event.target.parentNode.parentNode.parentNode.querySelector('.form-control');
-    userEntryAction(userInputControl)
+    userEntryAction(userInputControl);
 });
 
 //search history event listener
@@ -54,51 +59,53 @@ function addCity(cityUserEntry) {
     var coords = getCoordinates(cityUserEntry, apiKey);
     //get data needed to add to DOM and local storage
     coords.then((data) => {
-        var lat = data.city.coord.lat;
-        var lon = data.city.coord.lon;
+        if (data) {
+            var lat = data.city.coord.lat;
+            var lon = data.city.coord.lon;
 
-        var listHtml = "<li class='active' data-lat='" + lat + "' data-lon='" +
-            lon + "'><a>" + cityUserEntry + "</a></li>";
-        //add to DOM at the beginning of the element
-        navMenu.insertAdjacentHTML("afterbegin", listHtml);
+            var listHtml = "<li class='active' data-lat='" + lat + "' data-lon='" +
+                lon + "'><a>" + cityUserEntry + "</a></li>";
+            //add to DOM at the beginning of the element
+            navMenu.insertAdjacentHTML("afterbegin", listHtml);
 
 
 
 
-        //IF MORE THAN MAX NEED TO DELETE ONE (BOTTOM) FROM DOM ALSO
-        console.log(navMenu.children.length == maxNumberOfMenuItems + 1);
-        console.log(maxNumberOfMenuItems);
-        console.log(navMenu.children.length);
+            //IF MORE THAN MAX NEED TO DELETE ONE (BOTTOM) FROM DOM ALSO
+            console.log(navMenu.children.length == maxNumberOfMenuItems + 1);
+            console.log(maxNumberOfMenuItems);
+            console.log(navMenu.children.length);
 
-        //this works but its not adding it now <<<<<<<<<<<<<<<<
-        if (navMenu.children.length == maxNumberOfMenuItems + 1 || navMenu.children.length == maxNumberOfMenuItems) {
-            navMenu.children[maxNumberOfMenuItems - 1].remove();
+            //this works but its not adding it now <<<<<<<<<<<<<<<<
+            if (navMenu.children.length == maxNumberOfMenuItems + 1 || navMenu.children.length == maxNumberOfMenuItems) {
+                navMenu.children[maxNumberOfMenuItems - 1].remove();
+            }
+
+
+            //add to local storage
+            // Parse any JSON previously stored in allEntries
+            var existingEntries = JSON.parse(localStorage.getItem("allSavedCities"));
+            if (existingEntries == null) {
+                existingEntries = [];
+            }
+            if (existingEntries.length === maxNumberOfMenuItems) {
+                //if over maxNumberOfMenuItems remove one before adding
+                existingEntries.pop();
+                //also remove top li active class item from DOM
+                document.querySelector('.active').remove();
+            }
+            //create object to add to local storage array
+            var cityObject = {
+                name: cityUserEntry,
+                lat: data.city.coord.lat,
+                lon: data.city.coord.lon
+            };
+            existingEntries.unshift(cityObject);
+            // Save array back to local storage
+            localStorage.setItem("allSavedCities", JSON.stringify(existingEntries));
+            //also load weather data in DOM
+            getWeatherAndCityThenLoad(lat, lon, apiKey);
         }
-
-
-        //add to local storage
-        // Parse any JSON previously stored in allEntries
-        var existingEntries = JSON.parse(localStorage.getItem("allSavedCities"));
-        if (existingEntries == null) {
-            existingEntries = [];
-        }
-        if (existingEntries.length === maxNumberOfMenuItems) {
-            //if over maxNumberOfMenuItems remove one before adding
-            existingEntries.pop();
-            //also remove top li active class item from DOM
-            document.querySelector('.active').remove();
-        }
-        //create object to add to local storage array
-        var cityObject = {
-            name: cityUserEntry,
-            lat: data.city.coord.lat,
-            lon: data.city.coord.lon
-        };
-        existingEntries.unshift(cityObject);
-        // Save array back to local storage
-        localStorage.setItem("allSavedCities", JSON.stringify(existingEntries));
-        //also load weather data in DOM
-        getWeatherAndCityThenLoad(lat, lon, apiKey);
     });
 }
 
@@ -152,7 +159,6 @@ async function getWeatherByGeolocation(geoLat, geoLong, apiKey) {
     var consCoords = "https://api.openweathermap.org/data/2.5/onecall?units=imperial&lat=" +
         geoLat + "&lon=" +
         geoLong + "&appid=" + apiKey;
-
     const response = await fetch(consCoords).then(response => {
         return response.json();
     });
@@ -170,10 +176,9 @@ async function getCityName(geoLat, geoLong, apiKey) {
         if (response.ok) {
             return response.json();
         } else {
-            alert("Response: " +
-                response.status + ". Please enter a valid city name.")
+            userInputFieldEl.classList.add("invalid");
+            userInputFieldEl.placeholder = "test";
         }
-
     });
     return response.city.name;
 }
@@ -182,13 +187,12 @@ async function getCityName(geoLat, geoLong, apiKey) {
 async function getCoordinates(cityName, apiKey) {
     var consCoords = "https://api.openweathermap.org/data/2.5/forecast?units=imperial&q=" + cityName +
         "&appid=" + apiKey;
-
     const response = await fetch(consCoords).then(response => {
         if (response.ok) {
             return response.json();
         } else {
-            alert("Response: " +
-                response.status + ". Please enter a valid city name.")
+            userInputFieldEl.classList.add("invalid");
+            userInputFieldEl.placeholder = "Enter Valid City (" + response.status + ")";
         }
     });
     return response;
