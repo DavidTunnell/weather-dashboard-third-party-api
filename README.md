@@ -15,4 +15,4 @@ A live demo can be found here: https://davidtunnell.github.io/weather-dashboard-
 
 # Screenshots
 
-![Screenshot](./assets/screencap.png)
+![Screenshot](./assets/screencap-one.png)
