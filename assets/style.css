@@ -1,6 +1,9 @@
 /* Layout inspired from https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_temp_blog&stacked=h , https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_temp_portfolio&stacked=h*/
 
 
+/* Classes*/
+
+
 /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
 
 .row.content {
@@ -48,9 +51,12 @@
     padding-left: 1px;
 }
 
-a:hover {
-    cursor: pointer;
+.invalid {
+    border: 2px dashed red;
 }
+
+
+/* Elements */
 
 
 /* Set black background color, white text and some padding */
@@ -62,12 +68,16 @@ footer {
     height: 3.5em;
 }
 
-.invalid {
-    border: 2px dashed red;
+
+/*Button Hover*/
+
+a:hover {
+    cursor: pointer;
 }
 
 
-/* On small screens, set height to 'auto' for sidenav and grid */
+/* Media Queries
+On small screens, set height to 'auto' for sidenav and grid */
 
 @media screen and (max-width: 768px) {
     .sidenav {

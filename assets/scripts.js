@@ -53,7 +53,6 @@ navMenu.addEventListener("click", function(event) {
 function userEntryAction(userInput) {
     addCity(userInput.value);
     userInput.value = "";
-    cardRows.innerHTML = "";
     userInputFieldEl.classList.remove("invalid");
     userInputFieldEl.placeholder = "Search City Name...";
 }
@@ -64,11 +63,15 @@ function addCity(cityUserEntry) {
     //get data needed to add to DOM and local storage
     coords.then((data) => {
         if (data) {
-            var lat = data.city.coord.lat;
-            var lon = data.city.coord.lon;
-
-            var listHtml = "<li class='active' data-lat='" + lat + "' data-lon='" +
-                lon + "'><a>" + cityUserEntry + "</a></li>";
+            //create object to add to local storage array
+            var cityObject = {
+                name: cityUserEntry,
+                lat: data.city.coord.lat,
+                lon: data.city.coord.lon
+            };
+            //create HTML to insert
+            var listHtml = "<li class='active' data-lat='" + cityObject.lat + "' data-lon='" +
+                cityObject.lon + "'><a>" + cityObject.name + "</a></li>";
             //add to DOM at the beginning of the element
             navMenu.insertAdjacentHTML("afterbegin", listHtml);
 
@@ -81,9 +84,14 @@ function addCity(cityUserEntry) {
             console.log(navMenu.children.length);
 
             //this works but its not adding it now <<<<<<<<<<<<<<<<
+            //aka it removed the last one but didnt add the new one
+
+            //it removes second to last from dom not last and then doesnt add the new one
+
             if (navMenu.children.length == maxNumberOfMenuItems + 1 || navMenu.children.length == maxNumberOfMenuItems) {
                 navMenu.children[maxNumberOfMenuItems - 1].remove();
             }
+
 
 
             //add to local storage
@@ -98,17 +106,12 @@ function addCity(cityUserEntry) {
                 //also remove top li active class item from DOM
                 document.querySelector('.active').remove();
             }
-            //create object to add to local storage array
-            var cityObject = {
-                name: cityUserEntry,
-                lat: data.city.coord.lat,
-                lon: data.city.coord.lon
-            };
             existingEntries.unshift(cityObject);
             // Save array back to local storage
             localStorage.setItem("allSavedCities", JSON.stringify(existingEntries));
+            cardRows.innerHTML = "";
             //also load weather data in DOM
-            getWeatherAndCityThenLoad(lat, lon, apiKey);
+            getWeatherAndCityThenLoad(cityObject.lat, cityObject.lon, apiKey);
         }
     });
 }
