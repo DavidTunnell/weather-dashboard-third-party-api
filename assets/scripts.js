@@ -201,13 +201,7 @@ function populateForecast(cityName, jsonObject) {
     var currentUvi = jsonObject.current.uvi;
     jumboUvEl.innerHTML = currentUvi;
     //give color to UV index based on value
-    if (currentUvi < 3) {
-        jumboUvEl.classList.add("btn-success");
-    } else if (currentUvi < 7) {
-        jumboUvEl.classList.add("btn-warning");
-    } else {
-        jumboUvEl.classList.add("btn-danger");
-    }
+    colorUvElement(currentUvi);
     //generate weather cards
     for (let i = 1; i < 6; i++) {
         cardRows.innerHTML += "<div class='col-sm-2 bg-primary cards'><h5>" +
@@ -216,6 +210,23 @@ function populateForecast(cityName, jsonObject) {
             "'><p>Temp: " + jsonObject.daily[i].temp.day + "°F</p><p>Wind: " +
             jsonObject.daily[i].wind_speed + " MPH</p><p>Humidity: " +
             jsonObject.daily[i].humidity + "</p></div>";
+    }
+}
+
+//give color to UV index based on value
+function colorUvElement(currentUvi) {
+    //if starts with btn, one of the classes will be added already so remove it 1st
+    var lastClass = jumboUvEl.classList[jumboUvEl.classList.length - 1];
+    if (lastClass.substring(0, 3) == "btn") {
+        jumboUvEl.classList.remove(lastClass);
+    }
+    //set UV Index color
+    if (currentUvi < 3) {
+        jumboUvEl.classList.add("btn-success");
+    } else if (currentUvi < 7) {
+        jumboUvEl.classList.add("btn-warning");
+    } else {
+        jumboUvEl.classList.add("btn-danger");
     }
 }
 
