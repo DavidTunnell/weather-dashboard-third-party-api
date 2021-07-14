@@ -209,7 +209,7 @@ function populateForecast(cityName, jsonObject) {
             "</h5><img src='" + getWeatherIcon(jsonObject.daily[i].weather[0].icon) +
             "'><p>Temp: " + jsonObject.daily[i].temp.day + "°F</p><p>Wind: " +
             jsonObject.daily[i].wind_speed + " MPH</p><p>Humidity: " +
-            jsonObject.daily[i].humidity + "</p></div>";
+            jsonObject.daily[i].humidity + "%</p></div>";
     }
 }
 
