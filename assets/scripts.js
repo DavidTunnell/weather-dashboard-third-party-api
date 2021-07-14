@@ -74,38 +74,21 @@ function addCity(cityUserEntry) {
                 cityObject.lon + "'><a>" + cityObject.name + "</a></li>";
             //add to DOM at the beginning of the element
             navMenu.insertAdjacentHTML("afterbegin", listHtml);
-
-
-
-
-            //IF MORE THAN MAX NEED TO DELETE ONE (BOTTOM) FROM DOM ALSO
-            console.log(navMenu.children.length == maxNumberOfMenuItems + 1);
-            console.log(maxNumberOfMenuItems);
-            console.log(navMenu.children.length);
-
-            //this works but its not adding it now <<<<<<<<<<<<<<<<
-            //aka it removed the last one but didnt add the new one
-
-            //it removes second to last from dom not last and then doesnt add the new one
-
-            if (navMenu.children.length == maxNumberOfMenuItems + 1 || navMenu.children.length == maxNumberOfMenuItems) {
-                navMenu.children[maxNumberOfMenuItems - 1].remove();
+            //if the max number is reached, remove the last item from the DOM
+            if (navMenu.children.length == maxNumberOfMenuItems + 1) {
+                navMenu.children[maxNumberOfMenuItems].remove();
             }
-
-
-
             //add to local storage
             // Parse any JSON previously stored in allEntries
             var existingEntries = JSON.parse(localStorage.getItem("allSavedCities"));
             if (existingEntries == null) {
                 existingEntries = [];
             }
-            if (existingEntries.length === maxNumberOfMenuItems) {
-                //if over maxNumberOfMenuItems remove one before adding
+            if (existingEntries.length >= maxNumberOfMenuItems) {
+                //if >= maxNumberOfMenuItems remove one before adding
                 existingEntries.pop();
-                //also remove top li active class item from DOM
-                document.querySelector('.active').remove();
             }
+            //add to beginning of array
             existingEntries.unshift(cityObject);
             // Save array back to local storage
             localStorage.setItem("allSavedCities", JSON.stringify(existingEntries));
