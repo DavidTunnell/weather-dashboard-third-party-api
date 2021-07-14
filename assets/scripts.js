@@ -110,7 +110,6 @@ function populateMenu() {
     }
 }
 
-
 //on page load ask the user for their location a populate data based on geolocation and get weather
 function onLoad() {
     //https://stackoverflow.com/questions/6033561/geolocation-zip-code/42350178
@@ -162,7 +161,6 @@ async function getCityName(geoLat, geoLong, apiKey) {
     var consCoords = "https://api.openweathermap.org/data/2.5/forecast?units=imperial&lat=" +
         geoLat + "&lon=" +
         geoLong + "&appid=" + apiKey;
-
     const response = await fetch(consCoords).then(response => {
         if (response.ok) {
             return response.json();
@@ -194,6 +192,7 @@ function getWeatherIcon(iconCode) {
 
 //populate the DOM with the forecast requested
 function populateForecast(cityName, jsonObject) {
+    //populate jumbo header
     jumboHeaderEl.innerHTML = cityName + " - " + moment.unix(jsonObject.current.dt).format("MM/DD/YYYY");
     jumboIconEl.src = getWeatherIcon(jsonObject.current.weather[0].icon);
     jumboTempEl.innerHTML = jsonObject.current.temp;
@@ -201,6 +200,7 @@ function populateForecast(cityName, jsonObject) {
     jumboHumidityEl.innerHTML = jsonObject.current.humidity;
     var currentUvi = jsonObject.current.uvi;
     jumboUvEl.innerHTML = currentUvi;
+    //give color to UV index based on value
     if (currentUvi < 3) {
         jumboUvEl.classList.add("btn-success");
     } else if (currentUvi < 7) {
@@ -208,6 +208,7 @@ function populateForecast(cityName, jsonObject) {
     } else {
         jumboUvEl.classList.add("btn-danger");
     }
+    //generate weather cards
     for (let i = 1; i < 6; i++) {
         cardRows.innerHTML += "<div class='col-sm-2 bg-primary cards'><h5>" +
             moment.unix(jsonObject.daily[i].dt).format("MM/DD/YYYY") +
