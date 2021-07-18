@@ -207,7 +207,7 @@ function populateForecast(cityName, jsonObject) {
         cardRows.innerHTML += "<div class='col-sm-2 bg-primary cards'><h5>" +
             moment.unix(jsonObject.daily[i].dt).format("MM/DD/YYYY") +
             "</h5><img src='" + getWeatherIcon(jsonObject.daily[i].weather[0].icon) +
-            "'><p>Temp: " + jsonObject.daily[i].temp.day + "°F</p><p>Wind: " +
+            "' alt='weather icon'><p>Temp: " + jsonObject.daily[i].temp.day + "°F</p><p>Wind: " +
             jsonObject.daily[i].wind_speed + " MPH</p><p>Humidity: " +
             jsonObject.daily[i].humidity + "%</p></div>";
     }
